@@ -3,14 +3,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useUser } from "@clerk/nextjs";
 
-export default function NewQuotePage() {
+function NewQuotePageContent() {
   const router = useRouter();
   const params = useSearchParams();
   const groupId = params.get("groupId");
@@ -82,6 +82,14 @@ export default function NewQuotePage() {
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function NewQuotePage() {
+  return (
+    <Suspense fallback={<div className="px-4 py-8 text-muted-foreground">Loading…</div>}>
+      <NewQuotePageContent />
+    </Suspense>
   );
 }
 

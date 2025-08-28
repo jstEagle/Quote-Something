@@ -55,7 +55,7 @@ export default function GroupDetailPage() {
       </Card>
 
       <div className="grid gap-6">
-        {quotes?.map((q) => (
+        {quotes?.map((q: any) => (
           <QuoteCard
             key={q._id}
             quote={{

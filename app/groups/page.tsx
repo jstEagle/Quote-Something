@@ -1,17 +1,16 @@
 "use client";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { GroupCard } from "@/components/GroupCard";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 
-export default function GroupsPage() {
+function GroupsPageContent() {
   const router = useRouter();
   const params = useSearchParams();
   const { isSignedIn } = useUser();
@@ -105,4 +104,12 @@ export default function GroupsPage() {
       </Card>
     </div>
   );
-} 
+}
+
+export default function GroupsPage() {
+  return (
+    <Suspense fallback={<div className="px-4 py-8 text-muted-foreground">Loading…</div>}>
+      <GroupsPageContent />
+    </Suspense>
+  );
+}
