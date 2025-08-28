@@ -10,7 +10,7 @@ import { api } from "@/convex/_generated/api";
 import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 
 export default function QuotesPage() {
-  const quotes = useQuery(api.quotes.listMine, {});
+  const quotes = useQuery(api.quotes.listMineWithMeta, {});
 
   const categories = ["All", "Motivation", "Inspiration", "Life", "Dreams", "Success", "Innovation"];
 
@@ -72,6 +72,9 @@ export default function QuotesPage() {
                 id: q._id,
                 text: q.text,
                 category: q.category,
+                likesCount: q.likesCount,
+                likedByMe: q.likedByMe,
+                savedByMe: q.savedByMe,
                 date: new Date(q.createdAt).toLocaleDateString(),
               }}
             />

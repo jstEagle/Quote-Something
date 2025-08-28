@@ -50,11 +50,5 @@ export default defineSchema({
         .index("by_user", ["userId"])
         .index("by_quote_user", ["quoteId", "userId"]),
 
-    // Comments on a quote
-    quoteComments: defineTable({
-        quoteId: v.id("quotes"),
-        authorId: v.id("users"),
-        text: v.string(),
-        createdAt: v.number(),
-    }).index("by_quote", ["quoteId"]),
+    // (comments removed)
 });

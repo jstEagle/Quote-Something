@@ -13,7 +13,7 @@ export default function GroupDetailPage() {
   const routeParams = useParams();
   const id = routeParams?.id as string;
   const group = useQuery(api.groups.get, { id: id as any });
-  const quotes = useQuery(api.quotes.listByGroup, { groupId: id as any });
+  const quotes = useQuery(api.quotes.listByGroupWithMeta, { groupId: id as any });
   const [copied, setCopied] = useState(false);
   const inviteUrl = useMemo(() => {
     if (!group?.accessCode) return "";
@@ -56,7 +56,19 @@ export default function GroupDetailPage() {
 
       <div className="grid gap-6">
         {quotes?.map((q) => (
-          <QuoteCard key={q._id} quote={{ id: q._id, text: q.text, author: undefined, category: q.category, likes: undefined, date: new Date(q.createdAt).toLocaleDateString() }} />
+          <QuoteCard
+            key={q._id}
+            quote={{
+              id: q._id,
+              text: q.text,
+              author: undefined,
+              category: q.category,
+              likesCount: (q as any).likesCount,
+              likedByMe: (q as any).likedByMe,
+              savedByMe: (q as any).savedByMe,
+              date: new Date(q.createdAt).toLocaleDateString(),
+            }}
+          />
         ))}
       </div>
     </div>
