@@ -1,103 +1,70 @@
-import Image from "next/image";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { QuoteCard } from "@/components/QuoteCard";
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="text-center mb-16">
+        <h1 className="text-4xl md:text-5xl font-bold mb-6">
+          Collect <i>hilarious</i> quotes with your friends
+        </h1>
+        <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
+          Create a group, add your inside-joke quotes, and later host a quiz to guess who said what.
+        </p>
+        <div className="flex gap-4 justify-center">
+          <Button asChild size="lg">
+            <Link href="/groups/new">Create a group</Link>
+          </Button>
+          <Button variant="outline" asChild size="lg">
+            <Link href="/how-it-works">How it works</Link>
+          </Button>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </div>
+
+      <div className="grid md:grid-cols-3 gap-6 mb-16">
+        <Card>
+          <CardHeader>
+            <CardTitle>Make a private group</CardTitle>
+          </CardHeader>
+          <CardContent className="text-muted-foreground">
+            Invite friends with a link. Everyone can add quotes and see the feed.
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Add quotes effortlessly</CardTitle>
+          </CardHeader>
+          <CardContent className="text-muted-foreground">
+            Capture the funny line with author and context. Mobile-friendly and fast.
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Host the quiz later</CardTitle>
+          </CardHeader>
+          <CardContent className="text-muted-foreground">
+            Turn your group’s quotes into a Kahoot-style game night. Coming soon.
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="mb-6 flex items-center justify-between">
+        <h2 className="text-2xl font-semibold">Recent quotes</h2>
+        <Button variant="link" asChild>
+          <Link href="/quotes">View all →</Link>
+        </Button>
+      </div>
+      <div className="grid gap-6">
+        {[
+          { id: 1, text: "That meeting could have been a meme.", author: "Alex", category: "Work", likes: 42, date: "2024-09-01" },
+          { id: 2, text: "I don’t nap, I pre-update my sleep.", author: "Sam", category: "Life", likes: 31, date: "2024-08-21" },
+          { id: 3, text: "It’s not a bug, it’s a surprise feature.", author: "Jordan", category: "Tech", likes: 54, date: "2024-08-10" },
+        ].map((q) => (
+          <QuoteCard key={q.id} quote={q} />
+        ))}
+      </div>
     </div>
   );
 }

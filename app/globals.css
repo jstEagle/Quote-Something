@@ -118,5 +118,10 @@
   }
   body {
     @apply bg-background text-foreground;
+    background-image: radial-gradient(40rem 20rem at 10% 0%, color-mix(in oklch, var(--primary) 6%, transparent), transparent),
+      radial-gradient(32rem 16rem at 90% -10%, color-mix(in oklch, var(--chart-2) 8%, transparent), transparent),
+      radial-gradient(24rem 12rem at 50% 120%, color-mix(in oklch, var(--chart-4) 7%, transparent), transparent);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
   }
 }
