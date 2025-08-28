@@ -3,8 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
+import { QuoteCard } from "@/components/QuoteCard";
 
 export default function QuotesPage() {
   // Mock data for quotes
@@ -94,55 +93,18 @@ export default function QuotesPage() {
                   ))}
                 </SelectContent>
               </Select>
-              <Button>
-                Share Quote
+              <Button asChild>
+                <Link href="/quotes/new">Share Quote</Link>
               </Button>
             </div>
           </div>
         </CardContent>
       </Card>
 
-      {/* Quotes Grid */}
+      {/* Quotes List */}
       <div className="grid gap-6">
         {quotes.map((quote) => (
-          <Card key={quote.id}>
-            <CardContent className="pt-6">
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex-1">
-                  <blockquote className="text-xl italic mb-4">
-                    "{quote.text}"
-                  </blockquote>
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
-                    <span className="font-medium">— {quote.author}</span>
-                    <Badge variant="secondary">
-                      {quote.category}
-                    </Badge>
-                    <span>{quote.date}</span>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 ml-4">
-                  <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-red-500">
-                    <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                    </svg>
-                    {quote.likes}
-                  </Button>
-                </div>
-              </div>
-              <Separator className="mb-4" />
-              <div className="flex gap-2">
-                <Button variant="link" size="sm" className="p-0 h-auto">
-                  Share
-                </Button>
-                <Button variant="link" size="sm" className="p-0 h-auto">
-                  Comment
-                </Button>
-                <Button variant="link" size="sm" className="p-0 h-auto">
-                  Save
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+          <QuoteCard key={quote.id} quote={quote} />
         ))}
       </div>
 
