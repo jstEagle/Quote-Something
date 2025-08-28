@@ -228,46 +228,7 @@ export const toggleSave = mutation({
     },
 });
 
-export const addComment = mutation({
-    args: { quoteId: v.id("quotes"), text: v.string() },
-    handler: async (ctx: any, args: any) => {
-        const identity = await ctx.auth.getUserIdentity();
-        if (!identity) throw new Error("Unauthorized");
-        const user = await ctx.db
-            .query("users")
-            .withIndex("by_clerkId", (q: any) =>
-                q.eq("clerkId", identity.subject)
-            )
-            .first();
-        if (!user) throw new Error("User not found");
-        const quote = await ctx.db.get(args.quoteId);
-        if (!quote) throw new Error("Quote not found");
-        const group = await ctx.db.get(quote.groupId);
-        if (!group) throw new Error("Group not found");
-        if (!group.memberIds.find((id: any) => String(id) === String(user._id)))
-            throw new Error("Not a group member");
-
-        const id = await ctx.db.insert("quoteComments", {
-            quoteId: quote._id,
-            authorId: user._id,
-            text: args.text,
-            createdAt: Date.now(),
-        });
-        return id;
-    },
-});
-
-export const listComments = query({
-    args: { quoteId: v.id("quotes") },
-    handler: async (ctx: any, args: any) => {
-        const comments = await ctx.db
-            .query("quoteComments")
-            .withIndex("by_quote", (q: any) => q.eq("quoteId", args.quoteId))
-            .order("asc")
-            .collect();
-        return comments;
-    },
-});
+// (comments removed)
 
 // List quotes from all groups the current user belongs to (basic)
 // (removed duplicate listMine)
