@@ -1,105 +1,71 @@
+"use client";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { GroupCard } from "@/components/GroupCard";
+import { useEffect, useState } from "react";
+import { useMutation, useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
 
 export default function GroupsPage() {
-  // Mock data for groups
-  const groups = [
-    {
-      id: 1,
-      name: "Motivational Quotes",
-      description: "Daily inspiration and motivation to keep you going. Share quotes that lift spirits and drive success.",
-      memberCount: 1247,
-      quoteCount: 892,
-      category: "Motivation",
-      isJoined: true
-    },
-    {
-      id: 2,
-      name: "Philosophy & Wisdom",
-      description: "Deep thoughts and philosophical insights from great minds throughout history.",
-      memberCount: 856,
-      quoteCount: 634,
-      category: "Philosophy",
-      isJoined: false
-    },
-    {
-      id: 3,
-      name: "Business & Leadership",
-      description: "Quotes about entrepreneurship, leadership, and business success from industry leaders.",
-      memberCount: 1123,
-      quoteCount: 445,
-      category: "Business",
-      isJoined: true
-    },
-    {
-      id: 4,
-      name: "Love & Relationships",
-      description: "Beautiful quotes about love, friendship, and human connections.",
-      memberCount: 678,
-      quoteCount: 567,
-      category: "Relationships",
-      isJoined: false
-    },
-    {
-      id: 5,
-      name: "Creativity & Art",
-      description: "Inspiration for artists, writers, and creative minds. Quotes that spark imagination.",
-      memberCount: 445,
-      quoteCount: 234,
-      category: "Creativity",
-      isJoined: false
-    },
-    {
-      id: 6,
-      name: "Science & Discovery",
-      description: "Quotes from scientists, inventors, and explorers about discovery and innovation.",
-      memberCount: 789,
-      quoteCount: 345,
-      category: "Science",
-      isJoined: true
-    }
-  ];
+  const router = useRouter();
+  const params = useSearchParams();
+  const { isSignedIn } = useUser();
+  const groups = useQuery(api.groups.listMine, {});
+  const [joinCode, setJoinCode] = useState("");
+  const joinByCode = useMutation(api.groups.joinByCode);
 
-  const categories = ["All", "Motivation", "Philosophy", "Business", "Relationships", "Creativity", "Science"];
+  useEffect(() => {
+    const code = params.get("code");
+    if (!code) return;
+    const tryJoin = async () => {
+      if (!isSignedIn) {
+        router.push("/sign-in");
+        return;
+      }
+      try {
+        const groupId = await joinByCode({ accessCode: code.toUpperCase() });
+        if (groupId) router.push(`/groups/${groupId}`);
+      } catch {
+        // no-op
+      }
+    };
+    void tryJoin();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params, isSignedIn]);
+
+  async function handleJoin() {
+    if (!joinCode) return;
+    if (!isSignedIn) {
+      router.push("/sign-in");
+      return;
+    }
+    const groupId = await joinByCode({ accessCode: joinCode.toUpperCase() });
+    if (groupId) router.push(`/groups/${groupId}`);
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-4">Groups</h1>
-        <p className="text-muted-foreground">
-          Join communities of like-minded people and share quotes in themed groups.
-        </p>
+        <p className="text-muted-foreground">Create a friend group or join with an access code.</p>
       </div>
 
-      {/* Search and Filter */}
+      {/* Join or Create */}
       <Card className="mb-8">
         <CardContent className="pt-6">
-          <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
             <div className="flex-1">
-              <Input
-                type="text"
-                placeholder="Search groups..."
-              />
+              <Input type="text" placeholder="Enter access code" value={joinCode} onChange={(e) => setJoinCode(e.target.value.toUpperCase())} />
             </div>
             <div className="flex gap-2">
-              <Select>
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Select category" />
-                </SelectTrigger>
-                <SelectContent>
-                  {categories.map((category) => (
-                    <SelectItem key={category} value={category}>
-                      {category}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Button asChild>
+              <Button onClick={handleJoin}>Join</Button>
+              <Button asChild variant="outline">
                 <Link href="/groups/new">Create Group</Link>
               </Button>
             </div>
@@ -109,8 +75,16 @@ export default function GroupsPage() {
 
       {/* Groups Grid */}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {groups.map((group) => (
-          <GroupCard key={group.id} group={group} />
+        {groups?.map((group: any) => (
+          <GroupCard key={group._id} group={{
+            id: group._id,
+            name: group.name,
+            description: group.description,
+            memberCount: group.memberIds.length,
+            quoteCount: 0,
+            category: group.categoryNames[0],
+            isJoined: true,
+          }} />
         ))}
       </div>
 

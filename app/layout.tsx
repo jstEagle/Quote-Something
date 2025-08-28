@@ -5,6 +5,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { MobileNav } from "@/components/MobileNav";
+import { Providers } from "./convex-client-provider";
+import { SignedIn, SignedOut, UserButton, SignInButton } from "@clerk/nextjs";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,10 +29,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
+        suppressHydrationWarning
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <Providers>
         <nav className="bg-background/70 backdrop-blur border-b sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between h-16">
@@ -53,9 +57,25 @@ export default function RootLayout({
                   <Link href="/how-it-works">How It Works</Link>
                 </Button>
                 <ThemeToggle />
+                <SignedIn>
+                  <UserButton afterSignOutUrl="/" />
+                </SignedIn>
+                <SignedOut>
+                  <SignInButton mode="modal">
+                    <Button size="sm">Sign in</Button>
+                  </SignInButton>
+                </SignedOut>
               </div>
               <div className="flex md:hidden items-center gap-1">
                 <ThemeToggle />
+                <SignedIn>
+                  <UserButton afterSignOutUrl="/" />
+                </SignedIn>
+                <SignedOut>
+                  <SignInButton mode="modal">
+                    <Button size="sm" variant="outline">Sign in</Button>
+                  </SignInButton>
+                </SignedOut>
                 <MobileNav />
               </div>
             </div>
@@ -74,6 +94,7 @@ export default function RootLayout({
             </div>
           </div>
         </footer>
+        </Providers>
       </body>
     </html>
   );
