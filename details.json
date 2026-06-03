@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "title": "Quote Something",
+  "description": "A web app for creating and sharing quote-style posts.",
+  "tags": [
+    "TypeScript",
+    "Next.js",
+    "Social App"
+  ],
+  "featured": false,
+  "order": 200,
+  "links": {
+    "demo": "https://quote-something.vercel.app",
+    "repo": "https://github.com/jstEagle/Quote-Something"
+  },
+  "images": []
+}
